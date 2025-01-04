@@ -393,7 +393,6 @@ print((Student.get_total_students()))
 
 from abc import ABC, abstractmethod
 
-
 class Shape(ABC):
     @abstractmethod
     def get_area(self):
