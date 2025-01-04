@@ -377,7 +377,7 @@ class Student:
 
     def __init__(self):
         self.name = name
-        Student.total_students += 1
+        Student.total_students += 2
 
     @staticmethod
     def det_total_results():
