@@ -356,7 +356,6 @@
 # Пример использования:
 
 
-
 # circle = Circle(radius=5)
 # rectangle = Rectangle(length=4, width=3)
 
