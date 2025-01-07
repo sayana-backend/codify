@@ -457,3 +457,366 @@ rectangle = Rectangle(length=5, width=3)
 
 print(circle.get_area())
 print(rectangle.get_area())
+
+
+#21-hw  перегрузка операторов
+
+class Vector:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def __add__(self, other):
+        return Vector(self.x + other.x, self.y + other.y)
+
+    def __mul__(self, scalar):
+        return Vector(self.x * scalar, self.y * scalar)
+
+    def __repr__(self):
+        return f"Vector({self.x}, {self.y})"
+
+# 22-hw сравнение обьектов
+
+class Student:
+    def __init__(self, name, grades):
+        self.name = name
+        self.grades = grades
+
+    def average(self):
+        return sum(self.grades) / len(self.grades)
+
+    def __eq__(self, other):
+        return self.average() == other.average()
+
+    def __lt__(self, other):
+        return self.average() < other.average()
+
+    def __gt__(self, other):
+        return self.average() > other.average()
+
+    def __repr__(self):
+        return f"Student({self.name}, {self.grades})"
+
+
+# 23-hw parsing
+
+# 24-hw class Student
+
+class Student:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+        self.grades = []
+
+    def add_grade(self, grade):
+        if 1 <= grade <= 5:
+            self.grades.append(grade)
+            print(f"Оценка {grade} добавлена для {self.name}.")
+        else:
+            print("Оценка должна быть в пределах от 1 до 5.")
+
+    def calculate_average(self):
+        if self.grades:
+            average = sum(self.grades) / len(self.grades)
+            return round(average, 2)
+        return 0
+
+    def display_info(self):
+        print(f"Студент: {self.name}")
+        print(f"Возраст: {self.age}")
+        print(f"Оценки: {self.grades}")
+        print(f"Средний балл: {self.calculate_average()}")
+
+
+# Пример использования
+student = Student("Боб", 20)
+student.add_grade(4)
+student.add_grade(5)
+student.add_grade(3)
+student.display_info()
+
+
+# 25-hw Bankaccount
+
+class BankAccount:
+    def __init__(self, balance=0):
+        self.balance = balance
+
+    def deposit(self, amount):
+        if amount > 0:
+            self.balance += amount
+            print(f"Внесено {amount} на счет.")
+        else:
+            print("Сумма депозита должна быть положительной.")
+
+    def withdraw(self, amount):
+        if amount > 0 and amount <= self.balance:
+            self.balance -= amount
+            print(f"Снято {amount} с счета.")
+        elif amount <= 0:
+            print("Сумма снятия должна быть положительной.")
+        else:
+            print("Недостаточно средств на счете.")
+
+    def get_balance(self):
+        return self.balance
+
+
+class BankAccountWithOwner(BankAccount):
+    def __init__(self, owner, balance=0):
+        super().__init__(balance)
+        self.owner = owner
+
+    def display_account_info(self):
+        print(f"Владелец счета: {self.owner}")
+        print(f"Баланс счета: {self.get_balance()}")
+
+
+account = BankAccountWithOwner("Иван Иванов", 1000)
+account.deposit(500)
+account.withdraw(300)
+account.display_account_info()
+print(f"Текущий баланс: {account.get_balance()}")
+
+
+# 26-hw Полиморфизм
+
+class Product:
+    def __init__(self, price):
+        if price > 0:
+            self._price = price
+        else:
+            print("Цена должна быть положительным числом.")
+            self._price = 0
+
+    @property
+    def price(self):
+        return self._price
+
+    @price.setter
+    def price(self, value):
+        if value > 0:
+            self._price = value
+        else:
+            print("Цена должна быть положительным числом.")
+
+    def get_description(self):
+        return "Это продукт с базовой информацией."
+
+
+class Clothes(Product):
+    def __init__(self, price, size):
+        super().__init__(price)
+        if size in ['S', 'M', 'L', 'XL']:
+            self._size = size
+        else:
+            print("Некорректный размер. Возможные значения: 'S', 'M', 'L', 'XL'.")
+            self._size = 'M'
+
+    @property
+    def size(self):
+        return self._size
+
+    @size.setter
+    def size(self, value):
+        if value in ['S', 'M', 'L', 'XL']:
+            self._size = value
+        else:
+            print("Недопустимый размер. Возможные значения: 'S', 'M', 'L', 'XL'.")
+
+    def get_description(self):
+        return f"Одежда, размер: {self.size}, цена: {self.price}"
+
+
+class Electronics(Product):
+    def __init__(self, price, warranty_years):
+        super().__init__(price)
+        if warranty_years >= 0:
+            self._warranty_years = warranty_years
+        else:
+            print("Гарантия должна быть неотрицательным числом.")
+            self._warranty_years = 0
+
+    @property
+    def warranty_years(self):
+        return self._warranty_years
+
+    @warranty_years.setter
+    def warranty_years(self, value):
+        if value >= 0:
+            self._warranty_years = value
+        else:
+            print("Гарантия должна быть неотрицательным числом.")
+
+    def get_description(self):
+        return f"Электронное устройство, гарантия: {self.warranty_years} лет, цена: {self.price}"
+
+
+class Food(Product):
+    def __init__(self, price, expiration_date):
+        super().__init__(price)
+        if expiration_date >= "2025-01-01":
+            self._expiration_date = expiration_date
+        else:
+            print("Срок годности не может быть в прошлом.")
+            self._expiration_date = "2025-01-01"
+
+    @property
+    def expiration_date(self):
+        return self._expiration_date
+
+    @expiration_date.setter
+    def expiration_date(self, value):
+        if value >= "2025-01-01":
+            self._expiration_date = value
+        else:
+            print("Срок годности не может быть в прошлом.")
+
+    def get_description(self):
+        return f"Продукт питания, срок годности до: {self.expiration_date}, цена: {self.price}"
+
+
+clothes = Clothes(1000, 'M')
+electronics = Electronics(3000, 2)
+food = Food(500, "2025-05-01")
+
+print(clothes.get_description())
+print(electronics.get_description())
+print(food.get_description())
+
+# 27-hw Инкапсуляция
+
+class Student:
+    def __init__(self):
+        self.__grades = []
+
+    @property
+    def grades(self):
+        return self.__grades
+
+    def add_grade(self, grade):
+        if 1 <= grade <= 5:
+            self.__grades.append(grade)
+        else:
+            print("Некорректная оценка! Оценка должна быть числом от 1 до 5.")
+
+
+student = Student()
+
+student.add_grade(4)
+student.add_grade(3.5)
+student.add_grade(6)
+student.add_grade('A')
+print(student.grades)
+
+# 28-hw Электронные устройства
+
+from abc import ABC, abstractmethod
+
+
+class ElectronicDevice(ABC):
+    @abstractmethod
+    def turn_on(self):
+        pass
+
+    @abstractmethod
+    def turn_off(self):
+        pass
+
+
+class Smartphone(ElectronicDevice):
+    def turn_on(self):
+        print("Смартфон включён")
+
+    def turn_off(self):
+        print("Смартфон выключен")
+
+
+class Laptop(ElectronicDevice):
+    def turn_on(self):
+        print("Ноутбук включён")
+
+    def turn_off(self):
+        print("Ноутбук выключен")
+
+
+smartphone = Smartphone()
+laptop = Laptop()
+
+
+smartphone.turn_on()
+smartphone.turn_off()
+
+laptop.turn_on()
+laptop.turn_off()
+
+# 29-hw Перевозка грузов
+
+from abc import ABC, abstractmethod
+
+
+class Transport(ABC):
+    @abstractmethod
+    def carry_load(self, weight):
+        pass
+
+
+class Truck(Transport):
+    def carry_load(self, weight):
+        return self._check_weight(weight, 1000)
+
+    def _check_weight(self, weight, max_weight):
+        return "Перегруз" if weight > max_weight else "Груз принят"
+
+
+class Ship(Transport):
+    def carry_load(self, weight):
+        return self._check_weight(weight, 50000)
+
+    def _check_weight(self, weight, max_weight):
+        return "Перегруз" if weight > max_weight else "Груз принят"
+
+
+def main():
+    weight = float(input("Введите вес груза (в кг): "))
+
+    truck = Truck()
+    ship = Ship()
+
+    print("Для грузовика:", truck.carry_load(weight))
+    print("Для корабля:", ship.carry_load(weight))
+
+
+main()
+
+# 30-hw Простой класс с стр
+
+class Person:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+    def __str__(self):
+        return f"Имя: {self.name}, Возраст: {self.age}"
+
+    def __repr__(self):
+        return f"Person(name='{self.name}', age={self.age})"
+
+# 31-hw
+
+class MathUtils:
+    @staticmethod
+    def calculate_area(**kwargs):
+        if kwargs.get('radius') is not None:
+            radius = kwargs.get('radius')
+            return 3.14 * radius ** 2
+        elif kwargs.get('length') is not None and kwargs.get('width') is not None:
+            length = kwargs.get('length')
+            width = kwargs.get('width')
+            return length * width
+        else:
+            print("Необходимо указать radius для круга или length и width для прямоугольника")
+
+
+print(MathUtils.calculate_area(radius=5))
+print(MathUtils.calculate_area(length=4, width=3))
