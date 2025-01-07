@@ -785,8 +785,6 @@ def main():
 
     print("Для грузовика:", truck.carry_load(weight))
     print("Для корабля:", ship.carry_load(weight))
-
-
 main()
 
 # 30-hw Простой класс с стр
