@@ -315,6 +315,42 @@ print(author_1.return_book())
 print(author_1.check_status())
 
 
+"""2"""
+
+
+class Book:
+    def __init__(self, title, author):
+        self.title = title
+        self.author = author
+        self.status = "В наличии"
+
+    def issue(self):
+        if self.status == "В наличии":
+            self.status = "Выдана"
+            print(f"Книга '{self.title}' выдана.")
+        else:
+            print(f"Книга '{self.title}' уже выдана.")
+
+    def return_book(self):
+        if self.status == "Выдана":
+            self.status = "В наличии"
+            print(f"Книга '{self.title}' возвращена.")
+        else:
+            print(f"Книга '{self.title}' не была выдана.")
+
+    def check_status(self):
+        print(f"Статус книги '{self.title}': {self.status}")
+
+
+# Пример использования
+book1 = Book("Война и мир", "Лев Толстой")
+book1.check_status()
+book1.issue()
+book1.check_status()
+book1.return_book()
+book1.check_status()
+
+
 # 17-hw
 
 class Account:
